@@ -3,80 +3,87 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Matches extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
 
     public $table = 'matches';
-    protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'player_id',
-        'match_date',
-        'opponent_first_name',
-        'opponent_last_name',
-        'tournament',
+        'tournament_id',
+        'player1_id',
+        'player2_id',
+        'round',
+        'court_number',
+        'start_time',
+        'end_time',
+        'status',
         'score',
-        'match_round',
-        'result',
-        'duration',
-        'surface',
-        'location',
-        'prize_money',
-        'opponent_ranking',
-        'oppo_flag_image',
-        'oppo_country',
-        'status'
+        'winner_id',
+        'highlights_video_url',
+        'match_stats'
     ];
 
     protected $casts = [
-        'player_id' => 'integer',
-        'match_date' => 'datetime',
-        'opponent_first_name' => 'string',
-        'opponent_last_name' => 'string',
-        'tournament' => 'string',
-        'score' => 'string',
-        'match_round' => 'string',
-        'result' => 'string',
-        'duration' => 'string',
-        'surface' => 'string',
-        'location' => 'string',
-        'prize_money' => 'decimal:2',
-        'opponent_ranking' => 'integer',
-        'oppo_flag_image' => 'string',
-        'oppo_country' => 'string',
-        'status' => 'string'
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'match_stats' => 'array'
     ];
 
-    public static $rules = [
-        'player_id' => 'required|exists:players,id', 
-        'match_date' => 'required|date',
-        'opponent_first_name' => 'required|min:2|max:255|alpha',
-        'opponent_last_name' => 'required|min:2|max:255|alpha',
-        'tournament' => 'required|string|min:2|max:255',
-        'score' => 'nullable|string|regex:/^(\d+-\d+(\^\d+)?(\s\d+-\d+(\^\d+)?)*|bye)$/',
-        'match_round' => 'required|in:Round of 128,Round of 64,Round of 32,Round of 16,Quarter_finals,Semi_final,Final',
-        'result' => 'required|in:W,L',
-        'duration' => 'required|date_format:H:i:s',
-        'surface' => 'required|in:clay,hard,indoor,grass',
-        'location' => 'required|min:2|max:255',
-        'prize_money' => 'required|numeric|min:0',
-        'opponent_ranking' => 'required|integer|min:1',
-        'oppo_flag_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        'oppo_country' => 'required|string|max:255',
-        'status' => 'required|in:completed,ongoing,canceled'
-    ];
-
-    /**
-     * Relationship: A match belongs to a player.
-     */
-    public function player()
+    // Relationships
+    public function tournament()
     {
-        return $this->belongsTo(Player::class, 'player_id');
+        return $this->belongsTo(Tournament::class);
+    }
+
+    public function player1()
+    {
+        return $this->belongsTo(Players::class, 'player1_id');
+    }
+
+    public function player2()
+    {
+        return $this->belongsTo(Players::class, 'player2_id');
+    }
+
+    public function winner()
+    {
+        return $this->belongsTo(Players::class, 'winner_id');
+    }
+
+    public function scores()
+    {
+        return $this->hasMany(Score::class);
+    }
+
+    public function videos()
+    {
+        return $this->hasMany(Videos::class);
+    }
+
+    public function galleries()
+    {
+        return $this->hasMany(Gallery::class);
+    }
+
+    // Helper methods
+    public function getDurationAttribute()
+    {
+        if ($this->end_time && $this->start_time) {
+            return $this->end_time->diffInMinutes($this->start_time);
+        }
+        return null;
+    }
+
+    public function getIsCompletedAttribute()
+    {
+        return $this->status === 'completed';
+    }
+
+    public function getIsInProgressAttribute()
+    {
+        return $this->status === 'in_progress';
     }
 }
-
-

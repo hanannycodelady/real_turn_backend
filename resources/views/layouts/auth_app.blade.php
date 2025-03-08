@@ -7,7 +7,7 @@
 
     <!-- General CSS Files -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('web/css/style.css') }}">
@@ -29,7 +29,7 @@
                     </div>
                     @yield('content')
                     <div class="simple-footer">
-{{--                        Copyright &copy; {{ getSettingValue('application_name') }}  {{ date('Y') }}--}}
+                        Copyright &copy; {{ config('app.name') }} {{ date('Y') }}
                     </div>
                 </div>
             </div>
@@ -49,5 +49,6 @@
 <script src="{{ asset('web/js/stisla.js') }}"></script>
 <script src="{{ asset('web/js/scripts.js') }}"></script>
 <!-- Page Specific JS File -->
+@stack('scripts')
 </body>
 </html>

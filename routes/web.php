@@ -22,8 +22,10 @@ Route::get('/', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-
-//Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/register', [RegisteredUserController::class, 'store'])->middleware('guest');
+Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'register']);
+Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->middleware('auth:sanctum');
 
 
 Route::resource('players', App\Http\Controllers\PlayersController::class);
@@ -45,3 +47,21 @@ Route::resource('stats', App\Http\Controllers\statsController::class);
 
 
 Route::resource('ranks', App\Http\Controllers\RankController::class);
+
+Route::resource('coachOverviews', App\Http\Controllers\CoachOverviewController::class);
+
+Route::resource('coachBios', App\Http\Controllers\CoachBioController::class);
+
+Route::resource('videos', App\Http\Controllers\VideoController::class);
+
+Route::resource('galleries', App\Http\Controllers\GalleryController::class);
+
+Route::resource('schools', App\Http\Controllers\SchoolController::class);
+
+Route::resource('communities', App\Http\Controllers\CommunityController::class);
+
+Route::resource('scores', App\Http\Controllers\ScoreController::class);
+
+Route::resource('tickets', App\Http\Controllers\TicketController::class);
+
+Route::resource('calendars', App\Http\Controllers\CalendarController::class);

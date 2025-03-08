@@ -36,7 +36,7 @@
                         {{ $errors->first('password') }}
                     </div>
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="password_confirmation" class="control-label">Confirm Password</label>
                     <input id="password_confirmation" type="password"
                            class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid': '' }}"
@@ -44,7 +44,7 @@
                     <div class="invalid-feedback">
                         {{ $errors->first('password_confirmation') }}
                     </div>
-                </div>
+                </div> --}}
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
                         Set a New Password

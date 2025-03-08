@@ -5,6 +5,8 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Players;
+use App\Models\User;
 
 /**
  * Class Bio
@@ -20,6 +22,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $paragraph2
  * @property string $career_review
  * @property string $paragraph3
+ * @property string $date_of_birth
+ * @property string $place_of_birth
+ * @property string $height
+ * @property string $weight
+ * @property string $plays
+ * @property string $turned_pro
+ * @property string $coach
+ * @property string $career_titles
+ * @property string $biography
+ * @property string $social_media_links
  */
 class Bio extends Model
 {
@@ -37,7 +49,17 @@ class Bio extends Model
         'career_highlights',
         'paragraph2',
         'career_review',
-        'paragraph3'
+        'paragraph3',
+        'date_of_birth',
+        'place_of_birth',
+        'height',
+        'weight',
+        'plays',
+        'turned_pro',
+        'coach',
+        'career_titles',
+        'biography',
+        'social_media_links'
     ];
 
     /**
@@ -53,7 +75,13 @@ class Bio extends Model
         'career_highlights'   => 'string',
         'paragraph2'          => 'string',
         'career_review'       => 'string',
-        'paragraph3'          => 'string'
+        'paragraph3'          => 'string',
+        'date_of_birth' => 'date',
+        'height' => 'float',
+        'weight' => 'float',
+        'turned_pro' => 'date',
+        'career_titles' => 'integer',
+        'social_media_links' => 'array'
     ];
 
     /**
@@ -71,4 +99,15 @@ class Bio extends Model
         'career_review'       => 'required',
         'paragraph3'          => 'required'
     ];
+
+    // Relationships
+    public function player()
+    {
+        return $this->belongsTo(Players::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
